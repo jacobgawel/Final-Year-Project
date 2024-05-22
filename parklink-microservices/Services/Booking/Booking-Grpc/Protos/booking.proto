@@ -1,0 +1,64 @@
+﻿syntax = "proto3";
+
+service BookingProtoService {
+  rpc GetBooking (GetBookingRequest) returns (BookingModel);
+  rpc FineDeleted (BookingIdRequest) returns (BookingUpdateStatus);
+  rpc CheckAvailable (GetAvailableRequest) returns (AvailableReturn);
+  rpc VerifyFineStatus (VerificationRequest) returns (VerificationResult);
+  rpc VerifyPaymentStatus (FinePaidRequest) returns (FinePaidResult);
+}
+
+// request parameters that will be passed in the function
+message GetAvailableRequest {
+  string BookingDate = 1;
+  string Duration = 2;
+  string ParkingId = 3;
+  int32 SlotCapacity = 4;
+}
+
+message FinePaidRequest {
+  string BookingId = 1;
+  bool FinePaid = 2;
+}
+
+message FinePaidResult {
+  string BookingId = 1;
+  bool Result = 2;
+  string UserEmail = 3;
+}
+
+message VerificationRequest {
+  string BookingId = 1;
+  bool FineStatus = 2;
+}
+
+message VerificationResult {
+  bool Result = 1;
+  string BookingId = 2;
+  string UserEmail = 3;
+}
+
+message  AvailableReturn {
+  bool Result = 1;
+}
+
+message GetBookingRequest {
+  string bookingId = 1;
+}
+
+message BookingIdRequest {
+  string BookingId = 1;
+}
+
+// items that will be returned from the request
+message BookingModel {
+  string Id = 1;
+  string AccountId = 2;
+  string ParkingId = 3;
+  string StartDate = 4;
+  string Email = 5;
+}
+
+message BookingUpdateStatus {
+  bool status = 1;
+}

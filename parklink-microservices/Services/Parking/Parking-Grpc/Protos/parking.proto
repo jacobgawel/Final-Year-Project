@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+// for now this is enough definition for service to service communication
+// between booking and parking
+// this will be used to make a quick check if the parking spot exists and 
+// to pass essential information to create the booking.
+
+service ParkingProtoService {
+  rpc GetParking (GetParkingRequest) returns (ParkingModel);
+}
+
+message GetParkingRequest {
+  string ParkingId = 1;
+}
+
+message ParkingModel {
+  string Id = 1;
+  bool AvailabilityStatus = 2;
+  string AccountId = 3;
+  string Price = 4;
+  bool VerificationStatus = 7;
+  string Address = 8;
+  int32 SlotCapacity = 9;
+  int32 DayLimit = 10;
+  bool DayLimited = 11;
+  string TimeLimit = 5;
+  bool TimeLimited = 6;
+}

@@ -1,0 +1,10 @@
+parklink-microservices/.idea
+parklink-microservices/.vs
+parklink-microservices/.vscode
+bin
+obj
+.vs
+*.suo
+*.user
+.DS_Store
+keys

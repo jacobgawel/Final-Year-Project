@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>Booking_Infrastructure</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Booking-Domain\Booking-Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="13.0.1" />
+        <PackageReference Include="Google.Protobuf" Version="3.21.5" />
+        <PackageReference Include="Grpc.Net.ClientFactory" Version="2.49.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.49.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="AWSSDK.S3" Version="3.7.305.28" />
+        <PackageReference Include="Hangfire" Version="1.8.11" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.11" />
+        <PackageReference Include="Humanizer" Version="2.14.1" />
+        <PackageReference Include="MassTransit" Version="8.1.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.16" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.16" />
+        <PackageReference Include="SendGrid" Version="9.29.2" />
+        <PackageReference Include="TimePeriodLibrary.NET" Version="2.1.5" />
+        <PackageReference Include="ZXing.Net" Version="0.16.9" />
+        <PackageReference Include="ZXing.Net.Bindings.SkiaSharp" Version="0.16.14" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="..\..\Parking\Parking-Grpc\Protos\parking.proto" GrpcServices="Client">
+        <Link>Protos\parking.proto</Link>
+        </Protobuf>
+    </ItemGroup>
+
+</Project>

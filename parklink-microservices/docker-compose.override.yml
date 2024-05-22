@@ -1,0 +1,184 @@
+version: '3.4'
+
+services:
+  parklinkdb:
+    container_name: parklinkdb
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      MSSQL_SA_PASSWORD: Pass123$
+      POSTGRES_DB: parklinkdb
+      ACCEPT_EULA: "Y"
+    volumes:
+      - sqlserver:/var/opt/mssql
+  
+  localstack-aws:
+    container_name: localstack-aws
+    restart: always
+    environment:
+      - LOCALSTACK_AUTH_TOKEN="ACCESS_TOKEN"
+    ports:
+      - "4566:4566"            # LocalStack Gateway
+      - "4510-4559:4510-4559"  # external services port range
+    volumes:
+      - "localstack_data:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+  
+  hangfire-redis:
+    container_name: hangfire-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+    command:
+      - redis-server
+      - --maxmemory-policy
+      - noeviction
+      - --timeout
+      - "0"
+  
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    ports:
+      - "5672:5672"
+      - "15762:15672"
+  
+  booking-api:
+    container_name: booking-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development # Use "Production" to enable official AWS S3 Bucket. The "Development" environment uses LocalStack
+      - ASPNETCORE_URLS=http://+:80
+      - IdentityServiceUrl=http://identity-server
+      - ConnectionStrings:ParkingGrpc=http://parking-grpc
+      - ConnectionStrings:DefaultConnection=Server=parklinkdb;Database=Booking;User Id=sa;Password=Pass123$;TrustServerCertificate=True
+      - ConnectionStrings:HangfireRedis=hangfire-redis:6379,abortConnect=false,connectRetry=10,ssl=false
+      - ConnectionStrings:RabbitMq=rabbitmq
+      - LocalStack:Config:LocalStackHost=localstack-aws
+    restart: always
+    depends_on:
+      parklinkdb:
+        condition: service_started
+      hangfire-redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "8000:80"
+  
+  booking-grpc:
+    container_name: booking-grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:DefaultConnection=Server=parklinkdb;Database=Booking;User Id=sa;Password=Pass123$;TrustServerCertificate=True
+    restart: always
+    depends_on: 
+      booking-api:
+        condition: service_started
+      parklinkdb:
+        condition: service_started
+    ports:
+      - "8004:80"
+
+  parking-api:
+    container_name: parking-api
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - IdentityServiceUrl=http://identity-server
+      - ASPNETCORE_ENVIRONMENT=Development # Use "Production" to enable official AWS S3 Bucket. The "Development" environment uses LocalStack
+      - ConnectionStrings:DefaultConnection=Server=parklinkdb;Database=Parking;User Id=sa;Password=Pass123$;TrustServerCertificate=True
+      - ConnectionStrings:HangfireRedis=hangfire-redis:6379,abortConnect=false,connectRetry=10,ssl=false
+      - ConnectionStrings:BookingGrpc=http://booking-grpc
+      - ConnectionStrings:RabbitMq=rabbitmq
+      - LocalStack:Config:LocalStackHost=localstack-aws
+    restart: always
+    depends_on:
+      parklinkdb:
+        condition: service_started
+      hangfire-redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "8001:80"
+  
+  parking-grpc:
+    container_name: parking-grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:DefaultConnection=Server=parklinkdb;Database=Parking;User Id=sa;Password=Pass123$;TrustServerCertificate=True
+    restart: always
+    depends_on:
+      parking-api:
+        condition: service_started
+      parklinkdb:
+        condition: service_started
+    ports:
+      - "8005:80"
+  
+  reviews-api:
+    container_name: reviews-api
+    environment:
+      - IdentityServiceUrl=http://identity-server
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:DefaultConnection=Server=parklinkdb;Database=Review;User Id=sa;Password=Pass123$;TrustServerCertificate=True
+    restart: always
+    depends_on:
+      parklinkdb:
+        condition: service_started
+    ports:
+      - "8002:80"
+  
+  fines-api:
+    container_name: fines-api
+    environment:
+    - IdentityServiceUrl=http://identity-server
+    - ASPNETCORE_URLS=http://+:80
+    - ASPNETCORE_ENVIRONMENT=Development # Use "Production" to enable official AWS S3 Bucket. The "Development" environment uses LocalStack
+    - LocalStack:Config:LocalStackHost=localstack-aws
+    - ConnectionStrings:BookingGrpc=http://booking-grpc
+    - ConnectionStrings:HangfireRedis=hangfire-redis:6379,abortConnect=false,connectRetry=10,ssl=false
+    - ConnectionStrings:DefaultConnection=Server=parklinkdb;Database=Fines;User Id=sa;Password=Pass123$;TrustServerCertificate=True
+    restart: always
+    depends_on:
+        parklinkdb:
+          condition: service_started
+    ports:
+        - "8003:80"
+  
+  identity-server:
+    container_name: identity-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings:DefaultConnection=Server=parklinkdb;Database=Identity;User Id=sa;Password=Pass123$;TrustServerCertificate=True
+    restart: always
+    depends_on:
+      parklinkdb:
+        condition: service_started
+    ports:
+      - "8100:80"
+  
+  gatewayservice:
+    container_name: gateway-service
+    image: gatewayservice
+    build:
+      context: .
+      dockerfile: Services/GatewayService/GatewayService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    restart: always
+    depends_on:
+      parklinkdb:
+        condition: service_started
+    ports:
+      - "8101:80"

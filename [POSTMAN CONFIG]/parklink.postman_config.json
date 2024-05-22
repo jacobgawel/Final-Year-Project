@@ -1,0 +1,2888 @@
+{
+	"info": {
+		"_postman_id": "4554dbca-a131-44eb-a6cd-6fd0b38248c8",
+		"name": "Final Year Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22972131"
+	},
+	"item": [
+		{
+			"name": "Booking",
+			"item": [
+				{
+					"name": "BookingRecord",
+					"item": [
+						{
+							"name": "Create Booking Record",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"carRegistration\": \"hc11ase\",\r\n    \"CardNumber\": \"21313123123\",\r\n    \"Total\": \"23\",\r\n    \"Fees\": \"2\",\r\n    \"SubTotal\": \"2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/v1/booking/transaction",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"v1",
+										"booking",
+										"transaction"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Check unauth access to bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Jakub can't access bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check bob can access bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/account/card/{{bobId}}",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"account",
+								"card",
+								"{{bobId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create booking for bob",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json()\r",
+									"\r",
+									"pm.collectionVariables.set(\"bobBooking\", response.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"carRegistration\": \"asdasd\",\r\n  \"startDate\": \"2024-03-05T14:00:38.420Z\",\r\n  \"Duration\": \"00:30:00\",\r\n  \"parkingId\": \"1e0ec1fd-34ef-44ef-a5d3-2d776d5f35c9\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create booking for Jakub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json()\r",
+									"\r",
+									"pm.collectionVariables.set(\"jakubBooking\", response.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('Booking includes accound id of Jakub', function() {\r",
+									"    pm.expect(jsonData.accountId).to.eql(pm.collectionVariables.get('jakubId'))\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"carRegistration\": \"asdasd\",\r\n  \"startDate\": \"2024-06-11T06:00:00Z\",\r\n  \"endDate\": \"2024-06-11T20:00:00Z\",\r\n  \"parkingId\": \"c4331eda-8279-43ba-8c4c-18d3977e4023\",\r\n  \"recordId\": \"d88d910d-b185-46ef-8af1-d3d2d5cf66c1\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/booking",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check unauth access to booking id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/{{jakubBooking}}",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"{{jakubBooking}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Jakub can't access Bob's Booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403 because Jakub can't access Bob's booking\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/{{bobBooking}}",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"{{bobBooking}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Jakub can access his bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/booking/account/{{jakubId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"account",
+								"{{jakubId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Bob can access Jakub's booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/098bd680-0ac3-4ca9-b239-04891091e8f7",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"098bd680-0ac3-4ca9-b239-04891091e8f7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Jakub can't delete Bob's booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/{{jimBooking}}",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"{{jimBooking}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Jakub can delete his booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/{{jakubBooking}}",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"{{jakubBooking}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Bob can delete Jakub's booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/{{jakubBooking}}",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"{{jakubBooking}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check booking update Jakub booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"FA32ABE0-7EFD-428D-A628-00BCBA2E45B7\",\r\n    \"carRegistration\": \"asdasdasdasd\",\r\n    \"startDate\": \"2024-04-02T19:59:00Z\",\r\n    \"endDate\": \"2024-04-02T21:59:00Z\",\r\n    \"fineStatus\": false,\r\n    \"bookingConfirmation\": true,\r\n    \"duration\": \"01:30:00\",\r\n    \"subTotal\": \"12\",\r\n    \"total\": \"12\",\r\n    \"fees\": \"21\",\r\n    \"qrCodeLink\": \"123213123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check admin can update booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"2d88e041-5057-4c58-bb3e-91ff9b7d62c6\",\r\n  \"bookingConfirmation\": false,\r\n  \"email\": \"jakubgawel@icloud.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Jakub cannot update Jim booking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{jimBooking}}\",\r\n  \"carRegistration\": \"string\",\r\n  \"dateTime\": \"2023-11-10T23:36:00.662Z\",\r\n  \"status\": true,\r\n  \"price\": 12,\r\n  \"bookingConfirmation\": true,\r\n  \"parkingId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bookings for account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/account/{{jakubId}}",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"account",
+								"{{jakubId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Humanized Request For Cards Jakub",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/account/card/{{jakubId}}",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"account",
+								"card",
+								"{{jakubId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Gaps For Booking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"BookingDate\": \"2024-05-03T05:00:00Z\",\r\n  \"BookingExit\": \"2024-05-03T07:00:00Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/v1/booking/gaps/c4331eda-8279-43ba-8c4c-18d3977e4023",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"gaps",
+								"c4331eda-8279-43ba-8c4c-18d3977e4023"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Gaps For Booking Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"BookingDate\": \"2024-05-03\",\r\n  \"Duration\": \"01:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/parking/gaps/7023aa20-7464-49c0-87e6-64954ba4174f",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"parking",
+								"gaps",
+								"7023aa20-7464-49c0-87e6-64954ba4174f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Humanize Booking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/v1/booking/humanized/E29EA1FD-48B5-401C-9642-56606B7E8C76",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"humanized",
+								"E29EA1FD-48B5-401C-9642-56606B7E8C76"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Analytics For Provider",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/analytics/provider/0d1d9260-815b-4c4a-b9d7-838bbb346cab",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"analytics",
+								"provider",
+								"0d1d9260-815b-4c4a-b9d7-838bbb346cab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refund Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/refund/771cb3d7-8fd4-4da0-842c-500d8f30f21d",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"refund",
+								"771cb3d7-8fd4-4da0-842c-500d8f30f21d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Booking Analytics Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/booking/analytics/admin",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"booking",
+								"analytics",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Booking/Fine",
+			"item": [
+				{
+					"name": "Get Fines",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{fineApi}}/api/v1/fine",
+							"host": [
+								"{{fineApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"fine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Fine",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "BookingId",
+									"value": "6b95a955-8a6c-478e-9d2d-66c937abdb0b",
+									"type": "text"
+								},
+								{
+									"key": "Description",
+									"value": "This is gay again",
+									"type": "text"
+								},
+								{
+									"key": "File",
+									"type": "file",
+									"src": "/C:/Users/jakeg/Pictures/maxresdefault.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{fineApi}}/api/v1/fine",
+							"host": [
+								"{{fineApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"fine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fine By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{fineApi}}/api/v1/fine/b201eb23-a278-4ecd-8231-1ae5887114d4",
+							"host": [
+								"{{fineApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"fine",
+								"b201eb23-a278-4ecd-8231-1ae5887114d4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete fine",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{fineApi}}/api/v1/fine/9efdd6d2-0f04-4566-9931-7a8accebd560",
+							"host": [
+								"{{fineApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"fine",
+								"9efdd6d2-0f04-4566-9931-7a8accebd560"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update fine",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"b201eb23-a278-4ecd-8231-1ae5887114d4\",\r\n    \"description\": \"This is cool\",\r\n    \"total\": 70\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{fineApi}}/api/v1/fine",
+							"host": [
+								"{{fineApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"fine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Fine",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{fineApi}}/api/v1/fine/verify/828d39c6-4f4e-42a6-946a-f993048a8f15",
+							"host": [
+								"{{fineApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"fine",
+								"verify",
+								"828d39c6-4f4e-42a6-946a-f993048a8f15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fine Analytics For Provider",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{fineApi}}/api/v1/fine/provider/analytics/0d1d9260-815b-4c4a-b9d7-838bbb346cab",
+							"host": [
+								"{{fineApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"fine",
+								"provider",
+								"analytics",
+								"0d1d9260-815b-4c4a-b9d7-838bbb346cab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fines For User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{fineApi}}/api/v1/fine/user/0d1d9260-815b-4c4a-b9d7-838bbb346cab",
+							"host": [
+								"{{fineApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"fine",
+								"user",
+								"0d1d9260-815b-4c4a-b9d7-838bbb346cab"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Generate token for Bob",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json()\r",
+									"\r",
+									"pm.collectionVariables.set(\"bob\", response.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"description": "This is the type of authentication that we will be using",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "bob",
+									"description": "the name of the resource of owner",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "pass123$",
+									"description": "the password of the resource owner",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "postman",
+									"description": "the client id that we will be using to authenticate",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "NotASecret",
+									"description": "the clients secret that we will be providing",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "parkingApp openid profile",
+									"description": "the scopes that we are requesting",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5100/connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate token for Jakub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json()\r",
+									"\r",
+									"pm.collectionVariables.set(\"jakub\", response.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"description": "This is the type of authentication that we will be using",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "jakeg",
+									"description": "the name of the resource of owner",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "pass123$",
+									"description": "the password of the resource owner",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "postman",
+									"description": "the client id that we will be using to authenticate",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "NotASecret",
+									"description": "the clients secret that we will be providing",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "parkingApp openid profile",
+									"description": "the scopes that we are requesting",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:5100/connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5100",
+							"path": [
+								"connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check endpoint for Jakub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json()\r",
+									"\r",
+									"pm.collectionVariables.set(\"jakubId\", response.sub);\r",
+									"\r",
+									"pm.test(\"The bearer token is for Jakub\", function () {\r",
+									"        var jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData.username).to.eql(\"jakubgawel\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{IdentityServerUrl}}/connect/userinfo",
+							"host": [
+								"{{IdentityServerUrl}}"
+							],
+							"path": [
+								"connect",
+								"userinfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check endpoint for Bob",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json()\r",
+									"\r",
+									"pm.collectionVariables.set(\"bobId\", response.sub);\r",
+									"\r",
+									"pm.test(\"The bearer token is for Bob\", function () {\r",
+									"        var jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData.username).to.eql(\"bob\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{IdentityServerUrl}}/connect/userinfo",
+							"host": [
+								"{{IdentityServerUrl}}"
+							],
+							"path": [
+								"connect",
+								"userinfo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Proxy Configuration Tests",
+			"item": [
+				{
+					"name": "Booking",
+					"item": [
+						{
+							"name": "Get Bookings Bob",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bob}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway}}/booking",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get bookings Jakub (cannot)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway}}/booking",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Jakub's Booking by Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test('Result includes accound id of Jakub', function() {\r",
+											"    pm.expect(jsonData.accountId).to.eql(pm.collectionVariables.get('jakubId'))\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway}}/booking/{{jakubBooking}}",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"booking",
+										"{{jakubBooking}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create booking Jakub",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var response = pm.response.json()\r",
+											"\r",
+											"pm.collectionVariables.set(\"jakubBooking\", response.id);\r",
+											"\r",
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.test('Booking includes accound id of Jakub', function() {\r",
+											"    pm.expect(jsonData.accountId).to.eql(pm.collectionVariables.get('jakubId'))\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"carRegistration\": \"1231234\",\r\n  \"dateTime\": \"2023-11-10T19:19:38.420Z\",\r\n  \"status\": true,\r\n  \"Price\": 25,\r\n  \"Duration\": \"00:30:00\",\r\n  \"bookingConfirmation\": true,\r\n  \"parkingId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{gateway}}/booking",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Booking Jakub",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"{{jakubBooking}}\",\r\n  \"carRegistration\": \"asdasdasd\",\r\n  \"dateTime\": \"2023-11-10T23:36:00.662Z\",\r\n  \"status\": true,\r\n  \"price\": 22,\r\n  \"duration\": \"00:30:00\",\r\n  \"bookingConfirmation\": true,\r\n  \"parkingId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{gateway}}/booking",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"booking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Jakub Delete Booking",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 202\", function () {\r",
+											"    pm.response.to.have.status(202);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{gateway}}/booking/{{jakubBooking}}",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"booking",
+										"{{jakubBooking}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Bookings (list) By Account Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway}}/booking/account/{{jakubId}}",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"booking",
+										"account",
+										"{{jakubId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Parking",
+					"item": [
+						{
+							"name": "Get no auth",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway}}/parking/verified",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"parking",
+										"verified"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Write Requires Auth",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bob}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"Location\": \"Manchester\",\n  \"SlotType\": \"Normal\",\n  \"Price\": 12.0,\n  \"SlotSize\": \"asdasd\",\n  \"EVInfo\": \"asdsad\",\n  \"SlotNotes\": \"asdasd\",\n  \"AvailabilityStatus\": true,\n  \"AdditionalFeatures\": \"None\",\n  \"parkingId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"SlotImages\": \"few\",\n  \"SlotCapacity\": 2,\n  \"MaxTimeLimit\": \"02:00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{gateway}}/parking",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"parking"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Put Parking",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{bob}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Id\": \"9ca3680b-f688-490a-a925-a5f8b45aed1f\",\r\n    \"Location\": \"London\",\r\n    \"SlotType\": \"Normal\",\r\n    \"Price\": 20.50,\r\n    \"SlotSize\": \"asdasd\",\r\n    \"EVInfo\": \"asdsad\",\r\n    \"SlotNotes\": \"asdasd\",\r\n    \"AvailabilityStatus\": true,\r\n    \"AdditionalFeatures\": \"None\",\r\n    \"parkingId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n    \"SlotImages\": \"few\",\r\n    \"SlotCapacity\": 2,\r\n    \"MaxTimeLimit\": \"02:00:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{gateway}}/parking",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"parking"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Review",
+					"item": [
+						{
+							"name": "Get Review",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{gateway}}/review",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"review"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Review",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ReviewTitle\": \"This is bad\",\r\n    \"ReviewText\": \"Very convenient location and there are plenty of cameras\",\r\n    \"ParkingId\": \"c19675c5-460c-49b2-b261-3f54a71a02ee\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{gateway}}/review",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"review"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Put Review",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Id\": \"d49579dc-f84f-4e33-90ce-6a922468e71b\",\r\n    \"ReviewRating\": 5,\r\n    \"ReviewTitle\": \"Hey its Jimmy\",\r\n    \"ReviewText\": \"This parking lot is great lads\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{gateway}}/review",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"review"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jakub}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{gateway}}/review/726fdb6e-e6ea-421b-9426-6f1bccfdc8a4",
+									"host": [
+										"{{gateway}}"
+									],
+									"path": [
+										"review",
+										"726fdb6e-e6ea-421b-9426-6f1bccfdc8a4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Parking",
+			"item": [
+				{
+					"name": "Get Parking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{parkingApi}}/api/v1/parking",
+							"host": [
+								"{{parkingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"parking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Parking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": \"3bf40eb4-7815-44c4-bf23-147676d22943\",\r\n    \"Address\": \"Manny on the map\",\r\n    \"SlotType\": \"Normal\",\r\n    \"Price\": 13.123123,\r\n    \"AvailabilityStatus\": true,\r\n    \"AdditionalFeatures\": \"None\",\r\n    \"SlotCapacity\": 2,\r\n    \"SlotSize\": \"asdasd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{parkingApi}}/api/v1/parking",
+							"host": [
+								"{{parkingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"parking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Parking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{IdentityServerUrl}}/api/v1/parking/67833b6b-ce37-401a-bd89-201433c30899",
+							"host": [
+								"{{IdentityServerUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"parking",
+								"67833b6b-ce37-401a-bd89-201433c30899"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Parking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json()\r",
+									"\r",
+									"pm.collectionVariables.set(\"bobsParking\", response.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"AccountId of bob is in the body\", function () {\r",
+									"    pm.expect(response.accountId).to.eql(pm.collectionVariables.get('bobId'))\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Parking",
+									"value": "{ 'Address': 'asdasd', 'SlotType': 'Normal', 'Price': 3, 'SlotSize': 'sad', 'EVInfo': 'asd', 'SlotNotes': 2, 'AvailabilityStatus': true, 'AdditionalFeatures': 'None', 'SlotCapacity': 2, 'MaxTimeLimit': '02:30:00', 'Longitude': -2.239135, 'Latitude': 53.367243, 'City': 'Manchester', 'County': 'Greater Manchester' }",
+									"type": "text"
+								},
+								{
+									"key": "Files",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{parkingApi}}/api/v1/parking",
+							"host": [
+								"{{parkingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"parking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Parkings For Provider",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Parking By Distance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{bookingApi}}/api/v1/parking/distance?latitude=53.359848&longitude=-2.198329",
+							"host": [
+								"{{bookingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"parking",
+								"distance"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "53.359848"
+								},
+								{
+									"key": "longitude",
+									"value": "-2.198329"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "parkingId",
+									"value": "4291601F-30F7-4F73-9FBA-D74B37045BCA",
+									"type": "text"
+								},
+								{
+									"key": "imageList",
+									"type": "file",
+									"src": "/C:/Users/jakeg/Pictures/Osabama.0.meme.webp"
+								},
+								{
+									"key": "deleteList[0]",
+									"value": "e05476b8-8543-4fbf-ae98-4703ebe6bc83",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{parkingApi}}/api/v1/parking/images",
+							"host": [
+								"{{parkingApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"parking",
+								"images"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "Get Reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{reviewApi}}/api/v1/review",
+							"host": [
+								"{{reviewApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ReviewTitle\": \"This parking spot is amazing\",\r\n    \"ReviewText\": \"Very convenient location and there are plenty of cameras\",\r\n    \"ParkingId\": \"c19675c5-460c-49b2-b261-3f54a71a02ee\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{reviewApi}}/api/v1/review",
+							"host": [
+								"{{reviewApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jakub}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": \"e9916f82-2179-44d4-92ee-c9ccf49e841f\",\r\n    \"ReviewRating\": 3,\r\n    \"ReviewTitle\": \"Hey its Jakub\",\r\n    \"ReviewText\": \"This parking lot is shite man\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{reviewApi}}/api/v1/review",
+							"host": [
+								"{{reviewApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bob}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{reviewApi}}/api/v1/review/85be1f52-1bf9-4c15-8b8d-0d218dd2b01b",
+							"host": [
+								"{{reviewApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"review",
+								"85be1f52-1bf9-4c15-8b8d-0d218dd2b01b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{reviewApi}}/api/v1/review/parking/6a9f7640-d0e4-450a-b4ba-679b5fb6ea4a",
+							"host": [
+								"{{reviewApi}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"review",
+								"parking",
+								"6a9f7640-d0e4-450a-b4ba-679b5fb6ea4a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DVLA Verification",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "v8W1G3WaVv5kZEGAgGrbv3x8TH9obpPk74VsDC47"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"registrationNumber\": \"AA19AAA\"\r\n}"
+				},
+				"url": {
+					"raw": "https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles",
+					"protocol": "https",
+					"host": [
+						"driver-vehicle-licensing",
+						"api",
+						"gov",
+						"uk"
+					],
+					"path": [
+						"vehicle-enquiry",
+						"v1",
+						"vehicles"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "IdentityServerUrl",
+			"value": "http://localhost:8100"
+		},
+		{
+			"key": "bob",
+			"value": ""
+		},
+		{
+			"key": "jakub",
+			"value": ""
+		},
+		{
+			"key": "bobId",
+			"value": ""
+		},
+		{
+			"key": "jakubId",
+			"value": ""
+		},
+		{
+			"key": "bookingApi",
+			"value": "http://localhost:8000"
+		},
+		{
+			"key": "parkingApi",
+			"value": "localhost:8001"
+		},
+		{
+			"key": "bobsParking",
+			"value": ""
+		},
+		{
+			"key": "gateway",
+			"value": "http://localhost:8101",
+			"type": "string"
+		},
+		{
+			"key": "fineApi",
+			"value": "http://localhost:8003"
+		},
+		{
+			"key": "reviewApi",
+			"value": "http://localhost:8002"
+		},
+		{
+			"key": "bobBooking",
+			"value": ""
+		},
+		{
+			"key": "jakubBooking",
+			"value": ""
+		}
+	]
+}

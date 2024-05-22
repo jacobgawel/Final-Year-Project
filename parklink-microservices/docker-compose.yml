@@ -1,0 +1,68 @@
+version: '3.4'
+
+services:
+  parklinkdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    
+  localstack-aws:
+    image: localstack/localstack-pro
+
+  hangfire-redis:
+    image: redis
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+  
+  booking-api:
+    image: ${DOCKER_REGISTRY-}booking-api
+    build:
+      context: .
+      dockerfile: Services/Booking/Booking-Api/Dockerfile
+      
+  booking-grpc:
+    image: ${DOCKER_REGISTRY-}booking-grpc
+    build:
+      context: .
+      dockerfile: Services/Booking/Booking-Grpc/Dockerfile
+      
+  parking-api:
+    image: ${DOCKER_REGISTRY-}parking-api
+    build:
+      context: .
+      dockerfile: Services/Parking/Parking-Api/Dockerfile
+  
+  parking-grpc:
+    image: ${DOCKER_REGISTRY-}parking-grpc
+    build:
+      context: .
+      dockerfile: Services/Parking/Parking-Grpc/Dockerfile
+  
+  reviews-api:
+    image: ${DOCKER_REGISTRY-}reviews-api
+    build:
+      context: .
+      dockerfile: Services/Reviews/Reviews-Api/Dockerfile
+  
+  identity-server:
+    image: ${DOCKER_REGISTRY-}identity-server
+    build:
+      context: .
+      dockerfile: Services/IdentityServer/Identity-Server/Dockerfile
+  
+  gatewayservice:
+    image: ${DOCKER_REGISTRY-}gatewayservice
+    build:
+      context: .
+      dockerfile: Services/GatewayService/GatewayService/Dockerfile
+  
+  fines-api:
+    image: ${DOCKER_REGISTRY-}fines-api
+    build:
+      context: .
+      dockerfile: Services/Fines/Fines-Api/Dockerfile
+
+
+volumes:
+  localstack_data:
+  sqlserver:
+

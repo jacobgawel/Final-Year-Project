@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parklink Email Receipt</title>
+</head>
+<head>
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+		margin: 0;
+    padding: 0;
+		background-color: #cccccc;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+	}
+	table {
+		border-spacing: 0;
+	}
+	td {
+		padding: 0;
+    text-align: left;
+	}
+	img {
+		border: 0;
+    margin: 0;
+    max-width: 100%;
+	}
+  .preheader { 
+    display:none !important; 
+    visibility:hidden; 
+    opacity:0; 
+    color:transparent; 
+    height:0; 
+    width:0; 
+  }
+  .wrapper {
+		width: 100%;
+		table-layout: fixed;
+		background-color: #cccccc;
+		padding-bottom: 3.8rem;
+	}
+  .main {
+    background-color: #fff;
+		margin: 0 auto;
+		width: 100%;
+		max-width: 600px;
+		border-spacing: 0;
+    color: #001;
+    padding: 30px;
+  }
+  p {
+    line-height: 1.8;
+  }
+  .two-columns {
+    font-size: 0;
+  }
+  .two-columns .column {
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+  }
+  .two-columns .column-left {
+    width: 70%;
+  }
+  .two-columns .column-right {
+    width: 30%;
+  }
+  .two-columns .column-base {
+    width: 20%;
+  }
+  .two-columns .column-wrap {
+    width: 75%;
+    padding-left: 10px;
+    text-align: left;
+  }
+  .column-wrap .column-lg {
+    max-width: 300px;
+    padding-right: 8px;
+  }
+  .column-wrap .column-sm {
+    max-width: 100px;
+  }
+  .two-columns-even {
+    font-size: 0;
+    text-align: center;
+  }
+  .two-columns-even .column-even {
+    max-width: 260px;
+    text-align: center;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+  }
+  .column-even p {
+    margin: 0;
+  }
+  .text-light {
+    font-size: .8rem;
+    color: #858383;
+  }
+  .text-bold {
+    font-weight: 600;
+  }
+  </style>
+  <style type="text/css">
+    @media (max-width: 480px) {
+      .main {
+        padding: 10px !important;
+      }
+      .mq-height {
+        height: 80px !important;
+      }
+      .mq-padding-qr {
+        padding-top: 100px !important;
+      }
+      .mq-padding {
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <center class="wrapper">
+    <table role="presentation" class="main" width="100%">
+
+      <tr>
+        <td>
+          <table role="presentation" width="100%">
+            <tr>
+              <td>
+                <a href="http://localhost:3000" target="_blank">
+                  <img src="https://s3.eu-west-2.amazonaws.com/prlnk.cdn/site/receipt-logo.png" alt="Parklink logo" height="110">
+                </a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <table role="presentation" width="100%">
+            <tr>
+              <td>
+                <h1 style="font-size: 1.25rem; margin-bottom: 1.4rem;">Your booking has been cancelled!</h1>
+                <p>Your last booking with us has been cancelled. Please visit the website for more information. If you have any questions, please contact us at this <a href="mailto:admin@cloudcore.cc">email address</a>.</p>
+                  <br> 
+                  <span class="text-light">Not to worry, we have found an alternative booking for you!</span>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <table role="presentation" width="100%" style="margin: 1.25rem 0;">
+            <tr>
+              <td class="two-columns" style="background-color: #c6daff; border-radius: 8px; padding: 0 10px 30px 10px;">
+                <table class="column column-left">
+                  <tr>
+                    <td>
+                      <p style="font-size: .85rem; margin-bottom: 1.2rem;">
+                        A slot is available at
+                        <br>
+                        <span class="text-bold" style="font-size: 1rem;">{{ dateTime }}</span>
+                      </p>
+                      <p style="font-size: .85rem; margin-bottom: 1.2rem;">
+                        For
+                        <br>
+                        <span class="text-bold" style="font-size: 1rem;">{{ duration }}</span>
+                      </p>
+                      <p style="font-size: .85rem; margin-bottom: 2rem;">
+                        Parking Spot Id
+                        <br>
+                        <span class="text-bold" style="font-size: 1rem;">{{ parkingId }}</span>
+                      </p>
+                      <a href="" target="_blank" style="padding: 10px 18px; text-decoration: none; color: #001; background-color: #2970f0; font-size: .9rem;">View Parking Spot</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <table role="presentation" width="100%" style="margin: 25px 0; padding: 10px 0 20px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc;">
+            <tr>
+              <td class="two-columns-even">
+                <table class="column column-even">
+                  <tr>
+                    <td style="padding: 20px 0; padding-right: 50px">
+                      <img src="https://iili.io/RzvBHv.png" height="150px" width="200px" alt="Parklink car">
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <table>
+            <tr>
+              <td style="line-height: 1.4;">
+                <p class="text-bold" style="margin: 0; font-size: .95rem;">Thanks for choosing parklink!</p>
+                <a href="http://localhost:3000/" target="_blank" class="text-bold" style="text-decoration: none;">Parklink.com</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+    </table>
+  </center>
+</body>

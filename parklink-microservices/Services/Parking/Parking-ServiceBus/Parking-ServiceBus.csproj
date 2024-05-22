@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>Parking_ServiceBus</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Booking\Booking-Domain\Booking-Domain.csproj" />
+    <ProjectReference Include="..\Parking-Domain\Parking-Domain.csproj" />
+    <ProjectReference Include="..\Parking-Infrastructure\Parking-Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
