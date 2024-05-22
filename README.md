@@ -2,19 +2,8 @@
 
 ## Information about this repository
 
-This is the repository that you are going to use **individually** for developing your project. Please use the resources provided in the module to learn about **plagiarism** and how plagiarism awareness can foster your learning.
-
-Regarding the use of this repository, once a feature (or part of it) is developed and **working** or parts of your system are integrated and **working**, define a commit and push it to the remote repository. You may find yourself making a commit after a productive hour of work (or even after 20 minutes!), for example. Choose commit message wisely and be concise.
-
-Please choose the structure of the contents of this repository that suits the needs of your project but do indicate in this file where the main software artefacts are located.
-
 #### Project Structure
 
-The project is structured in a way that the frontend and backend are separated. The frontend is built using React and the backend is built using .NET Core. The backend is further divided into microservices that are orchestrated using Docker. The frontend is built using Node and NPM. 
-
-There are additional folders within the project that contain some of the images etc that are utilised within the project that are served from the AWS S3 bucket. Email templates are also stored in the project that are used to build the email templates that are sent to users which are hosted on SendGrid.
-
-#### Project Artefacts
 The project arterfacts that are utilised to build the project are found in 2 main folders:
 1. parklink-microservices - This folder contains the microservices that are used to build the backend services using docker orchestration.
 2. parklink-frontend - This folder contains the frontend of the project that is ran using node
