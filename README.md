@@ -2,6 +2,8 @@
 
 ## Information about this repository
 
+![Architecture]([IMAGES]\architecture_diagram.png)
+
 #### Project Structure
 
 The project arterfacts that are utilised to build the project are found in 2 main folders:
