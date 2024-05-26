@@ -2,7 +2,7 @@
 
 ## Information about this repository
 
-![Architecture]([IMAGES]\architecture_diagram.png)
+![Architecture]([IMAGES]/architecture_diagram.png)
 
 #### Project Structure
 
